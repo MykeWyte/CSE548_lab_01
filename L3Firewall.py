@@ -21,7 +21,7 @@ priority = 50000
 l2config = "l2firewall.config"
 l3config = "l3firewall.config"
 
-# initialize port tables
+# Michael White: initialize port tables
 PT = {}
 
 
@@ -182,15 +182,15 @@ class Firewall (EventMixin):
 		packet = event.parsed
 		match = of.ofp_match.from_packet(packet)
 
-		# retrieve src MAC and IP
+		# Michael White: retrieve src MAC and IP
 		src_mac = str(match.dl_src)
 		src_ip = str(match.nw_src)
 
-		# update port table
+		# Michael White: update port table
 		if src_mac not in PT:
 			PT[src_mac] = src_ip
 		elif src_ip != PT[src_mac]:
-			# make new blocking rule for bad MAC
+			# Michael White: make new blocking rule for bad MAC
 			msg = of.ofp_flow_mod()
 			new_match = match
 			new_match.dl_dst = None
@@ -205,8 +205,8 @@ class Firewall (EventMixin):
 			msg.idle_timeout = 200
 			event.connection.send(msg)
 
-		# attempted bonus
-		# bonus prevention of MAC spoofing
+		# Michael White: attempted bonus
+		# Michael White: bonus prevention of MAC spoofing
 #		if src_ip not in PT:
 #			PT[src_ip] = src_mac
 #		elif src_mac != PT[src_ip]:
